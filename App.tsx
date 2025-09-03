@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
 import type { Project } from './types';
 import { PROJECTS_DATA } from './constants';
@@ -17,6 +18,8 @@ const App: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeOverlay, setActiveOverlay] = useState<Overlay>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showInstructions, setShowInstructions] = useState(true);
+  const [isInstructionFading, setIsInstructionFading] = useState(false);
   
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [cursorStyle, setCursorStyle] = useState('grab');
@@ -114,6 +117,11 @@ const App: React.FC = () => {
   }, [handleMouseMove]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (showInstructions) {
+      setIsInstructionFading(true);
+      setTimeout(() => setShowInstructions(false), 500);
+    }
+    
     if (activeOverlay || selectedProject || (e.target as HTMLElement).closest('button, a')) return;
     
     document.body.classList.add('is-dragging');
@@ -157,6 +165,16 @@ const App: React.FC = () => {
             className={`w-screen h-screen overflow-hidden relative ${finalCursorClass}`}
             onMouseDown={handleMouseDown}
         >
+            {showInstructions && (
+              <div 
+                className={`absolute inset-0 z-20 bg-black bg-opacity-70 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${isInstructionFading ? 'opacity-0' : 'opacity-100'}`}
+                aria-hidden="true"
+              >
+                  <p className="text-white text-2xl uppercase tracking-widest font-light animate-pulse">
+                      Grab to Move
+                  </p>
+              </div>
+            )}
             <div 
                 className="absolute top-0 left-0"
                 style={{ 
