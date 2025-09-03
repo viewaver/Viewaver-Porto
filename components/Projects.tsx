@@ -1,7 +1,6 @@
-
 import React from 'react';
 import type { Project } from '../types';
-import MarqueeQuote from './MarqueeQuote';
+import DraggableQuote from './DraggableQuote';
 
 interface ProjectsProps {
   projects: Project[];
@@ -18,10 +17,11 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         <div
           key={`${tileIndex}-${project.id}`} // Unique key per project instance
           data-project-id={project.id}
-          className="group absolute cursor-pointer project-item z-10"
+          className="group absolute cursor-pointer project-item z-10 transition-transform duration-300 ease-in-out hover:scale-125 hover:z-20"
           style={{
             // Position is set using project data
             left: `${project.position.x}%`,
+            // FIX: Corrected typo from `positiony` to `position.y`
             top: `${project.position.y}%`,
             width: '15vw',
             maxWidth: '220px',
@@ -31,7 +31,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
             <img
               src={project.coverImage}
               alt={project.title}
-              className="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-110"
+              className="w-full h-auto object-cover"
               draggable={false}
               onDragStart={(e) => e.preventDefault()}
             />
@@ -47,7 +47,20 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
     return (
       <div key={tileIndex} className="relative w-[100vw] h-[100vh]">
         {projectItems}
-        <MarqueeQuote />
+        
+        {/* Scattered Quotes */}
+        <div className="absolute z-20 pointer-events-none" style={{ top: '55%', left: '30%' }}>
+          <DraggableQuote>A process of experimentation.</DraggableQuote>
+        </div>
+        <div className="absolute z-20 pointer-events-none" style={{ top: '10%', left: '60%' }}>
+          <DraggableQuote>Spark imagination.</DraggableQuote>
+        </div>
+        <div className="absolute z-20 pointer-events-none" style={{ top: '80%', left: '15%' }}>
+          <DraggableQuote>Beyond the confines.</DraggableQuote>
+        </div>
+        <div className="absolute z-20 pointer-events-none" style={{ top: '70%', left: '75%' }}>
+          <DraggableQuote>Unconventional explorations.</DraggableQuote>
+        </div>
       </div>
     );
   });

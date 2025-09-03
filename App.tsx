@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
 import type { Project } from './types';
 import { PROJECTS_DATA } from './constants';
@@ -15,7 +13,7 @@ import Hero from './components/Hero';
 type Overlay = 'about' | 'services' | 'contact' | null;
 
 const App: React.FC = () => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState<number | null>(null);
   const [activeOverlay, setActiveOverlay] = useState<Overlay>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showInstructions, setShowInstructions] = useState(true);
@@ -44,7 +42,7 @@ const App: React.FC = () => {
   }, []);
 
   const handleCloseModal = () => {
-    setSelectedProject(null);
+    setSelectedProjectIndex(null);
   };
 
   const handleNavClick = (overlay: Overlay) => {
@@ -105,9 +103,9 @@ const App: React.FC = () => {
       const projectElement = (e.target as HTMLElement).closest('.project-item');
       if (projectElement) {
         const projectId = projectElement.getAttribute('data-project-id');
-        const project = PROJECTS_DATA.find(p => p.id === projectId);
-        if (project) {
-          setSelectedProject(project);
+        const projectIndex = PROJECTS_DATA.findIndex(p => p.id === projectId);
+        if (projectIndex !== -1) {
+          setSelectedProjectIndex(projectIndex);
         }
       }
     }
@@ -122,7 +120,7 @@ const App: React.FC = () => {
       setTimeout(() => setShowInstructions(false), 500);
     }
     
-    if (activeOverlay || selectedProject || (e.target as HTMLElement).closest('button, a')) return;
+    if (activeOverlay || selectedProjectIndex !== null || (e.target as HTMLElement).closest('button, a')) return;
     
     document.body.classList.add('is-dragging');
     isDraggingRef.current = true;
@@ -147,7 +145,7 @@ const App: React.FC = () => {
     return <Preloader />;
   }
 
-  const finalCursorClass = activeOverlay || selectedProject ? 'cursor-auto' : `cursor-${cursorStyle}`;
+  const finalCursorClass = activeOverlay || selectedProjectIndex !== null ? 'cursor-auto' : `cursor-${cursorStyle}`;
 
   return (
     <div 
@@ -167,7 +165,7 @@ const App: React.FC = () => {
         >
             {showInstructions && (
               <div 
-                className={`absolute inset-0 z-20 bg-black bg-opacity-70 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${isInstructionFading ? 'opacity-0' : 'opacity-100'}`}
+                className={`absolute inset-0 z-40 bg-black bg-opacity-70 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${isInstructionFading ? 'opacity-0' : 'opacity-100'}`}
                 aria-hidden="true"
               >
                   <p className="text-white text-2xl uppercase tracking-widest font-light animate-pulse">
@@ -195,8 +193,12 @@ const App: React.FC = () => {
       {activeOverlay === 'services' && <Services onClose={handleCloseOverlay} />}
       {activeOverlay === 'contact' && <Contact onClose={handleCloseOverlay} />}
       
-      {selectedProject && (
-        <ProjectModal project={selectedProject} onClose={handleCloseModal} />
+      {selectedProjectIndex !== null && (
+        <ProjectModal 
+            projects={PROJECTS_DATA} 
+            initialIndex={selectedProjectIndex} 
+            onClose={handleCloseModal} 
+        />
       )}
     </div>
   );

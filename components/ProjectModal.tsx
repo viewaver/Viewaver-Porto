@@ -6,33 +6,33 @@ import ChevronRight from './icons/ChevronRight';
 import HeartIcon from './icons/HeartIcon';
 
 interface ProjectModalProps {
-  project: Project;
+  projects: Project[];
+  initialIndex: number;
   onClose: () => void;
 }
 
-const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isImageLoading, setIsImageLoading] = useState(true);
+const ProjectModal: React.FC<ProjectModalProps> = ({ projects, initialIndex, onClose }) => {
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(initialIndex);
   const [isLiked, setIsLiked] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  
+  const project = projects[currentProjectIndex];
+
+  useEffect(() => {
+    setIsLiked(false);
+  }, [project.id]);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
 
-  const goToPrevious = useCallback(() => {
-    setIsImageLoading(true);
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? project.images.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  }, [currentIndex, project.images]);
+  const goToPreviousProject = useCallback(() => {
+    setCurrentProjectIndex(prevIndex => (prevIndex - 1 + projects.length) % projects.length);
+  }, [projects.length]);
 
-  const goToNext = useCallback(() => {
-    setIsImageLoading(true);
-    const isLastSlide = currentIndex === project.images.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  }, [currentIndex, project.images]);
+  const goToNextProject = useCallback(() => {
+    setCurrentProjectIndex(prevIndex => (prevIndex + 1) % projects.length);
+  }, [projects.length]);
 
   useEffect(() => {
     const modalNode = modalRef.current;
@@ -51,16 +51,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
         onClose();
         return;
       }
-
-      if (project.images.length > 1) {
-          if (event.key === 'ArrowLeft') {
-            goToPrevious();
-            return;
-          }
-          if (event.key === 'ArrowRight') {
-            goToNext();
-            return;
-          }
+      if (event.key === 'ArrowLeft') {
+        goToPreviousProject();
+        return;
+      }
+      if (event.key === 'ArrowRight') {
+        goToNextProject();
+        return;
       }
 
       if (event.key === 'Tab') {
@@ -85,11 +82,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
       clearTimeout(timer);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose, goToPrevious, goToNext, project.images.length]);
+  }, [onClose, goToPreviousProject, goToNextProject]);
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center animate-fade-in cursor-auto"
+      className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center cursor-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="project-modal-title"
@@ -97,7 +94,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
       onClick={onClose}
     >
       <div 
-        className="relative w-full h-full flex flex-col p-4 md:p-8"
+        key={project.id}
+        className="relative w-full h-full flex flex-col p-4 md:p-8 animate-content-fade-in"
         onClick={(e) => e.stopPropagation()}
       >
         <header className="flex justify-between items-start text-white p-4 gap-4">
@@ -124,43 +122,30 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
         </header>
 
         <div className="relative flex-grow flex items-center justify-center min-h-0">
-            {project.images.length > 1 && (
-                <>
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-4">
-                        <button onClick={goToPrevious} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Previous image">
-                            <ChevronLeft />
-                        </button>
-                    </div>
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-4">
-                        <button onClick={goToNext} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Next image">
-                            <ChevronRight />
-                        </button>
-                    </div>
-                </>
-            )}
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-4">
+                <button onClick={goToPreviousProject} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Previous project">
+                    <ChevronLeft />
+                </button>
+            </div>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-4">
+                <button onClick={goToNextProject} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Next project">
+                    <ChevronRight />
+                </button>
+            </div>
 
-            <div className="w-full h-full flex items-center justify-center">
-                {isImageLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 z-20">
-                      <div className="text-white text-lg animate-pulse">
-                          Loading...
-                      </div>
-                    </div>
-                )}
+            <div className="w-full h-full flex items-center justify-center p-4">
                 <img 
-                    src={project.images[currentIndex]} 
-                    alt={`${project.title} - slide ${currentIndex + 1}`} 
-                    className={`max-w-full max-h-full object-contain transition-opacity duration-500 ${isImageLoading ? 'opacity-0' : 'opacity-100'}`} 
-                    onLoad={() => setIsImageLoading(false)}
+                    src={project.coverImage.replace('=w800', '=w2400')}
+                    alt={project.title}
+                    className="max-w-full max-h-full object-contain"
+                    draggable={false}
                 />
             </div>
         </div>
 
-        {project.images.length > 1 && (
-            <footer className="text-center text-white p-4">
-              <p>{currentIndex + 1} / {project.images.length}</p>
-            </footer>
-        )}
+        <footer className="text-center text-white p-4">
+            <p>{currentProjectIndex + 1} / {projects.length}</p>
+        </footer>
       </div>
     </div>
   );
