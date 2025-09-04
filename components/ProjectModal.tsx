@@ -86,7 +86,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ projects, initialIndex, onC
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center cursor-auto"
+      className="fixed inset-0 bg-[#2a1053] bg-opacity-95 z-50 flex items-center justify-center cursor-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="project-modal-title"
@@ -106,7 +106,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ projects, initialIndex, onC
           <div className="flex items-center gap-4 self-end md:self-auto">
             <button 
                 onClick={handleLike} 
-                className={`text-white transition-colors duration-300 ${isLiked ? 'text-red-500' : 'hover:text-red-400'}`}
+                className={`text-white transition-colors duration-300 ${isLiked ? 'text-[#DA5A2A]' : 'hover:text-[#DA5A2A]/80'}`}
                 aria-label={isLiked ? 'Unlike project' : 'Like project'}
             >
                 <HeartIcon isFilled={isLiked} />
@@ -123,12 +123,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ projects, initialIndex, onC
 
         <div className="relative flex-grow flex items-center justify-center min-h-0">
             <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1 md:p-4">
-                <button onClick={goToPreviousProject} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Previous project">
+                <button onClick={goToPreviousProject} className="p-2 bg-[#3B1877] bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Previous project">
                     <ChevronLeft />
                 </button>
             </div>
             <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1 md:p-4">
-                <button onClick={goToNextProject} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Next project">
+                <button onClick={goToNextProject} className="p-2 bg-[#3B1877] bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Next project">
                     <ChevronRight />
                 </button>
             </div>

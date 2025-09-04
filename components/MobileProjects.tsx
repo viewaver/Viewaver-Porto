@@ -8,7 +8,7 @@ interface MobileProjectsProps {
 
 const MobileProjects: React.FC<MobileProjectsProps> = ({ projects, onProjectClick }) => {
   return (
-    <section id="projects" className="bg-[#111111]">
+    <section id="projects" className="bg-[#3B1877]">
       <div className="grid grid-cols-2">
         {projects.map((project, index) => (
           <button 
@@ -17,7 +17,7 @@ const MobileProjects: React.FC<MobileProjectsProps> = ({ projects, onProjectClic
             onClick={() => onProjectClick(index)}
             aria-label={`View details for ${project.title}`}
           >
-            <div className="overflow-hidden bg-gray-900 aspect-square">
+            <div className="overflow-hidden bg-[#2a1053] aspect-square">
               <img 
                 src={project.coverImage} 
                 alt={project.title} 

@@ -29,16 +29,16 @@ const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
     <>
       <header className="fixed top-0 left-0 w-full p-6 md:p-8 z-50 flex justify-between items-center text-white mix-blend-difference">
         <div>
-          <a href="#home" aria-label="Go to top of the page" className="text-2xl font-bold tracking-wider uppercase">
+          <span aria-label="Go to top of the page" className="text-2xl font-bold tracking-wider uppercase cursor-default">
             VIEWAVER
-          </a>
+          </span>
         </div>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-4 md:gap-6 text-sm uppercase tracking-widest">
-          <button onClick={() => onNavClick('about')} className="hover:text-gray-400 transition-colors cursor-pointer">About</button>
-          <button onClick={() => onNavClick('services')} className="hover:text-gray-400 transition-colors cursor-pointer">Services</button>
-          <button onClick={() => onNavClick('contact')} className="hover:text-gray-400 transition-colors cursor-pointer">Contact</button>
+          <button onClick={() => onNavClick('about')} className="hover:text-[#DA5A2A] transition-colors cursor-pointer">About</button>
+          <button onClick={() => onNavClick('services')} className="hover:text-[#DA5A2A] transition-colors cursor-pointer">Services</button>
+          <button onClick={() => onNavClick('contact')} className="hover:text-[#DA5A2A] transition-colors cursor-pointer">Contact</button>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -53,11 +53,11 @@ const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
       </header>
       
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 bg-black z-40 flex flex-col items-center justify-center transition-opacity duration-300 md:hidden ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+      <div className={`fixed inset-0 bg-[#3B1877] z-40 flex flex-col items-center justify-center transition-opacity duration-300 md:hidden ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <nav className="flex flex-col items-center gap-8 text-2xl uppercase tracking-widest text-white">
-            <button onClick={() => handleLinkClick('about')} className="hover:text-gray-400 transition-colors">About</button>
-            <button onClick={() => handleLinkClick('services')} className="hover:text-gray-400 transition-colors">Services</button>
-            <button onClick={() => handleLinkClick('contact')} className="hover:text-gray-400 transition-colors">Contact</button>
+            <button onClick={() => handleLinkClick('about')} className="hover:text-[#DA5A2A] transition-colors">About</button>
+            <button onClick={() => handleLinkClick('services')} className="hover:text-[#DA5A2A] transition-colors">Services</button>
+            <button onClick={() => handleLinkClick('contact')} className="hover:text-[#DA5A2A] transition-colors">Contact</button>
           </nav>
       </div>
     </>

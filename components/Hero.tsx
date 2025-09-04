@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ChevronDown from './icons/ChevronDown';
 
 interface HeroProps {
-  onScrollDown: () => void;
+  isFading: boolean;
 }
 
-const fontClasses = [
+const FONT_CLASSES = [
   'font-metal-mania',
   'font-orbitron',
   'font-playfair-display',
@@ -16,41 +15,53 @@ const fontClasses = [
   'font-monoton',
   'font-special-elite',
   'font-sacramento',
+  'font-anton',
+  'font-lobster',
+  'font-bebas-neue',
+  'font-caveat',
+  'font-major-mono-display',
+  'font-uncial-antiqua',
+  'font-creepster',
 ];
 
-const Hero: React.FC<HeroProps> = ({ onScrollDown }) => {
-  const [fontIndex, setFontIndex] = useState(0);
+const Hero: React.FC<HeroProps> = ({ isFading }) => {
+  const [currentFontIndex, setCurrentFontIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setFontIndex(prevIndex => (prevIndex + 1) % fontClasses.length);
-    }, 150); // Change font rapidly for a shutter effect
+    const fontInterval = setInterval(() => {
+      setCurrentFontIndex(prevIndex => (prevIndex + 1) % FONT_CLASSES.length);
+    }, 80); // Faster interval for shutter effect
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(fontInterval);
+    };
   }, []);
 
   return (
-    <section id="home" className="h-screen w-full bg-black relative flex flex-col items-center justify-center text-white">
-      <div className="z-20 relative w-full h-full flex items-center justify-center text-center overflow-hidden">
-        <img
-            src="https://lh3.googleusercontent.com/pw/AP1GczNdWB6EHW_stWXw7KtLF5sVq6B_CHfTCfOMOD1niUtOp1e7MKulJCix4MOeDhQCs64ABNUIIVsqrPA0JWdaye_PPJpCp1Mz8-Q7awaAUqR8GrcwKA=w2400"
-            alt="Abstract animated art"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 opacity-60 mix-blend-lighten pointer-events-none"
+    <section 
+      id="home" 
+      className={`absolute inset-0 bg-[#3B1877] z-30 flex flex-col items-center justify-center text-white transition-opacity duration-500 ease-in-out ${isFading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+    >
+      <div className="absolute inset-0 w-full h-full z-0">
+        <img 
+          src="https://lh3.googleusercontent.com/pw/AP1GczMrCEBKIiUFJDAaa2J96-6fClOeKJFsdFco2qxj9PGbVJac8bvQSCVEDFpcaeQqF_vFNCKtC5zAu7ClHwEpAQe1cUbnsEVTchoG0tRq1TNEUR0W5A=w2400"
+          alt="Abstract textured background"
+          className="w-full h-full object-cover"
         />
-        <h1 
-          className={`relative text-6xl sm:text-7xl md:text-9xl whitespace-nowrap animate-vibrant-colors ${fontClasses[fontIndex]}`}
-        >
+      </div>
+      
+      {/* Black gradient overlay for text readability */}
+      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#3B1877] to-transparent z-10 pointer-events-none"></div>
+
+      <div className="relative z-20 text-center">
+        <h1 className={`text-6xl sm:text-8xl md:text-9xl whitespace-nowrap font-bold ${FONT_CLASSES[currentFontIndex]} animate-vibrant-colors`}>
           VIEWAVER
         </h1>
       </div>
       
-      <button 
-        onClick={onScrollDown}
-        aria-label="Scroll to projects"
-        className="absolute bottom-10 z-20 animate-bounce cursor-pointer"
-      >
-        <ChevronDown />
-      </button>
+      <div className="absolute bottom-10 z-20 text-center animate-fade-in-out">
+        <p className="uppercase tracking-widest text-sm">Scroll Down to Explore</p>
+      </div>
     </section>
   );
 };

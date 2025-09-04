@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Project } from './types';
 import { PROJECTS_DATA } from './constants';
 import About from './components/About';
@@ -11,6 +11,9 @@ import Preloader from './components/Preloader';
 import Hero from './components/Hero';
 import MobileProjects from './components/MobileProjects';
 import Footer from './components/Footer';
+import ScrollToTopButton from './components/ScrollToTopButton';
+import InfoPanel from './components/InfoPanel';
+import CursorGallery from './components/CursorGallery';
 
 type Overlay = 'about' | 'services' | 'contact' | null;
 
@@ -18,16 +21,14 @@ const App: React.FC = () => {
   const [selectedProjectIndex, setSelectedProjectIndex] = useState<number | null>(null);
   const [activeOverlay, setActiveOverlay] = useState<Overlay>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showInstructions, setShowInstructions] = useState(true);
-  const [isInstructionFading, setIsInstructionFading] = useState(false);
   
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [cursorStyle, setCursorStyle] = useState('grab');
   const [isMobileView, setIsMobileView] = useState(false);
 
-  const projectsContainerRef = useRef<HTMLDivElement>(null);
-  const isDraggingRef = useRef(false);
-  const dragStartRef = useRef({ x: 0, y: 0, canvasX: 0, canvasY: 0 });
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
+  const [isHeroFading, setIsHeroFading] = useState(false);
+  
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [isCursorInPanel, setIsCursorInPanel] = useState(false);
 
   useEffect(() => {
     // Simulate asset loading
@@ -43,15 +44,6 @@ const App: React.FC = () => {
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
-
-  // Set initial centered position for the seamless grid on desktop
-  useLayoutEffect(() => {
-    if (!isMobileView && projectsContainerRef.current) {
-      const { offsetWidth, offsetHeight } = projectsContainerRef.current;
-      // Start viewing the center tile of the 3x3 grid
-      setPosition({ x: -offsetWidth, y: -offsetHeight });
-    }
-  }, [isMobileView]);
 
   const handleCloseModal = () => {
     setSelectedProjectIndex(null);
@@ -69,146 +61,83 @@ const App: React.FC = () => {
     setSelectedProjectIndex(index);
   }
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDraggingRef.current || !projectsContainerRef.current) return;
-    e.preventDefault();
+  const handleScrollDown = useCallback(() => {
+    if (!isHeroVisible || isHeroFading) return;
     
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    
-    let newX = dragStartRef.current.canvasX + dx;
-    let newY = dragStartRef.current.canvasY + dy;
-
-    // Seamless looping logic
-    const tileWidth = projectsContainerRef.current.offsetWidth;
-    const tileHeight = projectsContainerRef.current.offsetHeight;
-
-    if (newX >= 0) {
-        newX -= tileWidth;
-        dragStartRef.current.canvasX -= tileWidth;
-    } else if (newX <= -2 * tileWidth) {
-        newX += tileWidth;
-        dragStartRef.current.canvasX += tileWidth;
-    }
-    
-    if (newY >= 0) {
-        newY -= tileHeight;
-        dragStartRef.current.canvasY -= tileHeight;
-    } else if (newY <= -2 * tileHeight) {
-        newY += tileHeight;
-        dragStartRef.current.canvasY += tileHeight;
-    }
-
-    setPosition({ x: newX, y: newY });
-  }, []);
-
-  const handleMouseUp = useCallback((e: MouseEvent) => {
-    if (!isDraggingRef.current) return;
-    
-    document.body.classList.remove('is-dragging');
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-    
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance < 5) { // Click threshold
-      const projectElement = (e.target as HTMLElement).closest('.project-item');
-      if (projectElement) {
-        const projectId = projectElement.getAttribute('data-project-id');
-        const projectIndex = PROJECTS_DATA.findIndex(p => p.id === projectId);
-        if (projectIndex !== -1) {
-          setSelectedProjectIndex(projectIndex);
-        }
+    setIsHeroFading(true);
+    setTimeout(() => {
+        setIsHeroVisible(false);
+    }, 500); // Match transition duration
+  }, [isHeroVisible, isHeroFading]);
+  
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 0) {
+        handleScrollDown();
       }
-    }
-    
-    isDraggingRef.current = false;
-    setCursorStyle('grab');
-  }, [handleMouseMove]);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (showInstructions) {
-      setIsInstructionFading(true);
-      setTimeout(() => setShowInstructions(false), 500);
-    }
-    
-    if (activeOverlay || selectedProjectIndex !== null || (e.target as HTMLElement).closest('button, a')) return;
-    
-    document.body.classList.add('is-dragging');
-    isDraggingRef.current = true;
-    setCursorStyle('grabbing');
-
-    dragStartRef.current = { 
-      x: e.clientX,
-      y: e.clientY,
-      canvasX: position.x,
-      canvasY: position.y
     };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-  };
 
-  const handleScrollDown = () => {
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+    if (isHeroVisible) {
+      window.addEventListener('wheel', handleWheel, { once: true });
+    }
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [isHeroVisible, handleScrollDown]);
+  
+  const handleGoHome = () => {
+      setIsHeroFading(false);
+      setIsHeroVisible(true);
+      window.scrollTo(0, 0);
+  };
+  
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    setCursorPosition({ x: e.clientX, y: e.clientY });
   };
 
   if (isLoading) {
     return <Preloader />;
   }
 
-  const finalCursorClass = activeOverlay || selectedProjectIndex !== null ? 'cursor-auto' : `cursor-${cursorStyle}`;
-
   return (
     <div 
-        className={`bg-[#111111] text-gray-200 font-sans leading-normal tracking-wide transition-opacity duration-1000 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        className={`bg-[#3B1877] text-gray-200 font-sans leading-normal tracking-wide transition-opacity duration-1000 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
     >
       <Header 
         onNavClick={handleNavClick} 
         />
       
-      <main>
-        <Hero onScrollDown={handleScrollDown} />
+      {isHeroVisible && <Hero isFading={isHeroFading} />}
 
+      <main className={isHeroVisible ? 'hidden' : ''}>
         {isMobileView ? (
           <MobileProjects projects={PROJECTS_DATA} onProjectClick={handleProjectClick} />
         ) : (
-          <section
-              id="projects"
-              ref={projectsContainerRef}
-              className={`w-screen h-screen overflow-hidden relative ${finalCursorClass}`}
-              onMouseDown={handleMouseDown}
-          >
-              {showInstructions && (
-                <div 
-                  className={`absolute inset-0 z-40 bg-black bg-opacity-70 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${isInstructionFading ? 'opacity-0' : 'opacity-100'}`}
-                  aria-hidden="true"
-                >
-                    <p className="text-white text-2xl uppercase tracking-widest font-light animate-pulse">
-                        Grab to Move
-                    </p>
-                </div>
-              )}
-              <div 
-                  className="absolute top-0 left-0"
-                  style={{ 
-                      width: '300vw', 
-                      height: '300vh',
-                      transform: `translate(${position.x}px, ${position.y}px)`,
-                      willChange: 'transform',
-                   }}
-              >
-                  <Projects 
-                      projects={PROJECTS_DATA} 
-                   />
+          <div className="flex w-full">
+            <div className="w-4/5">
+                <Projects 
+                    projects={PROJECTS_DATA}
+                    onProjectClick={handleProjectClick}
+                 />
+            </div>
+            <div 
+              className="w-1/5 px-8"
+              onMouseMove={handleMouseMove}
+              onMouseEnter={() => setIsCursorInPanel(true)}
+              onMouseLeave={() => setIsCursorInPanel(false)}
+            >
+              <div className="sticky top-0 h-screen flex flex-col pt-24 pb-8">
+                 <InfoPanel />
               </div>
-          </section>
+            </div>
+          </div>
         )}
       </main>
 
-      <Footer />
+      {!isHeroVisible && <Footer />}
+
+      {!isHeroVisible && !isMobileView && <ScrollToTopButton onGoHome={handleGoHome} />}
 
       {activeOverlay === 'about' && <About onClose={handleCloseOverlay} />}
       {activeOverlay === 'services' && <Services onClose={handleCloseOverlay} />}
@@ -220,6 +149,10 @@ const App: React.FC = () => {
             initialIndex={selectedProjectIndex} 
             onClose={handleCloseModal} 
         />
+      )}
+      
+      {!isHeroVisible && !isMobileView && (
+          <CursorGallery projects={PROJECTS_DATA} position={cursorPosition} isVisible={isCursorInPanel} />
       )}
     </div>
   );

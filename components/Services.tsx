@@ -14,7 +14,7 @@ const ServiceItem: React.FC<{
   onClick: () => void;
 }> = ({ service, isOpen, onClick }) => {
   return (
-    <div className="border-b border-gray-700 py-6">
+    <div className="border-b border-[#DA5A2A]/30 py-6">
       <button
         onClick={onClick}
         className="w-full flex justify-between items-center text-left cursor-pointer"
@@ -29,7 +29,7 @@ const ServiceItem: React.FC<{
           isOpen ? 'max-h-96 mt-4' : 'max-h-0'
         }`}
       >
-        <p className="text-gray-400 text-base md:text-lg leading-relaxed pr-8">
+        <p className="text-gray-300 text-base md:text-lg leading-relaxed pr-8">
           {service.description}
         </p>
       </div>
@@ -46,17 +46,17 @@ const Services: React.FC<ServicesProps> = ({ onClose }) => {
 
   return (
     <div 
-        className="fixed inset-0 bg-black bg-opacity-90 z-40 flex items-center justify-center p-4 cursor-pointer"
+        className="fixed inset-0 bg-[#2a1053] bg-opacity-90 z-40 flex items-center justify-center p-4 cursor-pointer"
         onClick={onClose}
     >
         <div 
-            className="bg-[#111111] p-8 md:p-12 relative max-w-4xl w-full max-h-[90vh] overflow-y-auto cursor-auto"
+            className="bg-[#3B1877] p-8 md:p-12 relative max-w-4xl w-full max-h-[90vh] overflow-y-auto cursor-auto"
             onClick={(e) => e.stopPropagation()}
         >
             <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white z-10 cursor-pointer">
                 <CloseIcon />
             </button>
-            <h2 className="text-3xl md:text-4xl font-light uppercase tracking-widest mb-10 border-b border-gray-700 pb-3">
+            <h2 className="text-3xl md:text-4xl font-light uppercase tracking-widest mb-10 border-b border-[#DA5A2A] pb-3">
                 Services
             </h2>
             <div>

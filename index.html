@@ -6,14 +6,14 @@
     <title>VIEWAVER Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Orbitron:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&family=Oswald:wght@200..700&family=Press+Start+2P&family=Bungee+Inline&family=Monoton&family=Special+Elite&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Orbitron:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&family=Oswald:wght@200..700&family=Press+Start+2P&family=Bungee+Inline&family=Monoton&family=Special+Elite&family=Sacramento&family=Anton&family=Lobster&family=Bebas+Neue&family=Caveat&family=Major+Mono+Display&family=Uncial+Antiqua&family=Creepster&family=Poppins:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       html {
         scroll-behavior: smooth;
       }
       body {
-        background-color: #111111;
+        background-color: #3B1877;
         color: #f0f0f0;
       }
       .project-item-title {
@@ -31,13 +31,6 @@
       }
       .animate-fade-in-out {
         animation: fadeInOut 2s ease-in-out infinite;
-      }
-      body.is-dragging,
-      body.is-dragging * {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
       }
       @keyframes rotate {
         from {
@@ -83,7 +76,7 @@
         animation: letter-fade-in-scale 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
       }
       .highlight-bg {
-        background-color: #ff003c;
+        background-color: #DA5A2A;
         padding: 2px 8px;
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
@@ -95,6 +88,33 @@
       .animate-content-fade-in {
         animation: content-fade-in 0.4s ease-out;
       }
+
+      /* New animation for asterisk colors */
+      @keyframes asterisk-color-change {
+        0%, 100% { color: #ff00ff; } /* Magenta */
+        25% { color: #00ffff; } /* Cyan */
+        50% { color: #ffff00; } /* Yellow */
+        75% { color: #00ff00; } /* Lime */
+      }
+      .animate-asterisk-colors {
+        animation: asterisk-color-change 2s linear infinite;
+      }
+
+      /* Cursor gallery trail animation */
+      @keyframes cursor-gallery-trail-fade-out {
+        from {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.5);
+        }
+      }
+      .cursor-gallery-trail-image {
+        animation: cursor-gallery-trail-fade-out 0.8s ease-out forwards;
+      }
+
       .font-metal-mania { font-family: 'Metal Mania', system-ui; }
       .font-orbitron { font-family: 'Orbitron', sans-serif; }
       .font-playfair-display { font-family: 'Playfair Display', serif; }
@@ -105,6 +125,14 @@
       .font-monoton { font-family: 'Monoton', system-ui; }
       .font-special-elite { font-family: 'Special Elite', system-ui; }
       .font-sacramento { font-family: 'Sacramento', cursive; }
+      .font-anton { font-family: 'Anton', sans-serif; }
+      .font-lobster { font-family: 'Lobster', cursive; }
+      .font-bebas-neue { font-family: 'Bebas Neue', sans-serif; }
+      .font-caveat { font-family: 'Caveat', cursive; }
+      .font-major-mono-display { font-family: 'Major Mono Display', monospace; }
+      .font-uncial-antiqua { font-family: 'Uncial Antiqua', system-ui; }
+      .font-creepster { font-family: 'Creepster', system-ui; }
+      .font-poppins { font-family: 'Poppins', sans-serif; }
     </style>
   <script type="importmap">
 {
