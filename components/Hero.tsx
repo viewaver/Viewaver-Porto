@@ -30,15 +30,15 @@ const Hero: React.FC<HeroProps> = ({ onScrollDown }) => {
   }, []);
 
   return (
-    <section className="h-screen w-full bg-black relative flex flex-col items-center justify-center text-white">
+    <section id="home" className="h-screen w-full bg-black relative flex flex-col items-center justify-center text-white">
       <div className="z-20 relative w-full h-full flex items-center justify-center text-center overflow-hidden">
         <img
             src="https://lh3.googleusercontent.com/pw/AP1GczNdWB6EHW_stWXw7KtLF5sVq6B_CHfTCfOMOD1niUtOp1e7MKulJCix4MOeDhQCs64ABNUIIVsqrPA0JWdaye_PPJpCp1Mz8-Q7awaAUqR8GrcwKA=w2400"
             alt="Abstract animated art"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 opacity-60 mix-blend-lighten pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96 opacity-60 mix-blend-lighten pointer-events-none"
         />
         <h1 
-          className={`relative text-7xl md:text-9xl whitespace-nowrap animate-vibrant-colors ${fontClasses[fontIndex]}`}
+          className={`relative text-6xl sm:text-7xl md:text-9xl whitespace-nowrap animate-vibrant-colors ${fontClasses[fontIndex]}`}
         >
           VIEWAVER
         </h1>

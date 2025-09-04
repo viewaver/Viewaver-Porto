@@ -95,15 +95,15 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ projects, initialIndex, onC
     >
       <div 
         key={project.id}
-        className="relative w-full h-full flex flex-col p-4 md:p-8 animate-content-fade-in"
+        className="relative w-full h-full flex flex-col p-2 sm:p-4 md:p-8 animate-content-fade-in"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="flex justify-between items-start text-white p-4 gap-4">
+        <header className="flex flex-col md:flex-row justify-between items-start text-white p-4 gap-4">
           <div className="flex-1">
-            <h2 id="project-modal-title" className="text-2xl font-bold mb-2">{project.title}</h2>
-            <p className="text-gray-400 text-base max-w-2xl">{project.description}</p>
+            <h2 id="project-modal-title" className="text-xl md:text-2xl font-bold mb-2">{project.title}</h2>
+            <p className="text-gray-400 text-sm md:text-base max-w-2xl">{project.description}</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 self-end md:self-auto">
             <button 
                 onClick={handleLike} 
                 className={`text-white transition-colors duration-300 ${isLiked ? 'text-red-500' : 'hover:text-red-400'}`}
@@ -122,12 +122,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ projects, initialIndex, onC
         </header>
 
         <div className="relative flex-grow flex items-center justify-center min-h-0">
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-4">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1 md:p-4">
                 <button onClick={goToPreviousProject} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Previous project">
                     <ChevronLeft />
                 </button>
             </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 md:p-4">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1 md:p-4">
                 <button onClick={goToNextProject} className="p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all cursor-pointer" aria-label="Next project">
                     <ChevronRight />
                 </button>

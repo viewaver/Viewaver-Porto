@@ -9,6 +9,8 @@ import ProjectModal from './components/ProjectModal';
 import Header from './components/Header';
 import Preloader from './components/Preloader';
 import Hero from './components/Hero';
+import MobileProjects from './components/MobileProjects';
+import Footer from './components/Footer';
 
 type Overlay = 'about' | 'services' | 'contact' | null;
 
@@ -21,6 +23,7 @@ const App: React.FC = () => {
   
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [cursorStyle, setCursorStyle] = useState('grab');
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const projectsContainerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef(false);
@@ -32,14 +35,23 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Set initial centered position for the seamless grid
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  // Set initial centered position for the seamless grid on desktop
   useLayoutEffect(() => {
-    if (projectsContainerRef.current) {
+    if (!isMobileView && projectsContainerRef.current) {
       const { offsetWidth, offsetHeight } = projectsContainerRef.current;
       // Start viewing the center tile of the 3x3 grid
       setPosition({ x: -offsetWidth, y: -offsetHeight });
     }
-  }, []);
+  }, [isMobileView]);
 
   const handleCloseModal = () => {
     setSelectedProjectIndex(null);
@@ -52,6 +64,10 @@ const App: React.FC = () => {
   const handleCloseOverlay = () => {
     setActiveOverlay(null);
   };
+  
+  const handleProjectClick = (index: number) => {
+    setSelectedProjectIndex(index);
+  }
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDraggingRef.current || !projectsContainerRef.current) return;
@@ -67,11 +83,9 @@ const App: React.FC = () => {
     const tileWidth = projectsContainerRef.current.offsetWidth;
     const tileHeight = projectsContainerRef.current.offsetHeight;
 
-    // When the viewport is about to exit the center tile, reset the position
-    // to the corresponding edge of the adjacent identical tile.
     if (newX >= 0) {
         newX -= tileWidth;
-        dragStartRef.current.canvasX -= tileWidth; // Adjust start pos to prevent jumps
+        dragStartRef.current.canvasX -= tileWidth;
     } else if (newX <= -2 * tileWidth) {
         newX += tileWidth;
         dragStartRef.current.canvasX += tileWidth;
@@ -138,7 +152,7 @@ const App: React.FC = () => {
   };
 
   const handleScrollDown = () => {
-    projectsContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   if (isLoading) {
@@ -157,37 +171,44 @@ const App: React.FC = () => {
       
       <main>
         <Hero onScrollDown={handleScrollDown} />
-        <section
-            id="projects"
-            ref={projectsContainerRef}
-            className={`w-screen h-screen overflow-hidden relative ${finalCursorClass}`}
-            onMouseDown={handleMouseDown}
-        >
-            {showInstructions && (
+
+        {isMobileView ? (
+          <MobileProjects projects={PROJECTS_DATA} onProjectClick={handleProjectClick} />
+        ) : (
+          <section
+              id="projects"
+              ref={projectsContainerRef}
+              className={`w-screen h-screen overflow-hidden relative ${finalCursorClass}`}
+              onMouseDown={handleMouseDown}
+          >
+              {showInstructions && (
+                <div 
+                  className={`absolute inset-0 z-40 bg-black bg-opacity-70 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${isInstructionFading ? 'opacity-0' : 'opacity-100'}`}
+                  aria-hidden="true"
+                >
+                    <p className="text-white text-2xl uppercase tracking-widest font-light animate-pulse">
+                        Grab to Move
+                    </p>
+                </div>
+              )}
               <div 
-                className={`absolute inset-0 z-40 bg-black bg-opacity-70 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${isInstructionFading ? 'opacity-0' : 'opacity-100'}`}
-                aria-hidden="true"
+                  className="absolute top-0 left-0"
+                  style={{ 
+                      width: '300vw', 
+                      height: '300vh',
+                      transform: `translate(${position.x}px, ${position.y}px)`,
+                      willChange: 'transform',
+                   }}
               >
-                  <p className="text-white text-2xl uppercase tracking-widest font-light animate-pulse">
-                      Grab to Move
-                  </p>
+                  <Projects 
+                      projects={PROJECTS_DATA} 
+                   />
               </div>
-            )}
-            <div 
-                className="absolute top-0 left-0"
-                style={{ 
-                    width: '300vw', 
-                    height: '300vh',
-                    transform: `translate(${position.x}px, ${position.y}px)`,
-                    willChange: 'transform',
-                 }}
-            >
-                <Projects 
-                    projects={PROJECTS_DATA} 
-                 />
-            </div>
-        </section>
+          </section>
+        )}
       </main>
+
+      <Footer />
 
       {activeOverlay === 'about' && <About onClose={handleCloseOverlay} />}
       {activeOverlay === 'services' && <Services onClose={handleCloseOverlay} />}
