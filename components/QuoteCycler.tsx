@@ -23,7 +23,7 @@ const QuoteCycler: React.FC = () => {
 
   return (
     <div className="text-right">
-      <blockquote className="text-4xl italic text-gray-300">
+      <blockquote className="text-2xl italic text-gray-300">
         "{currentQuote.text}"
       </blockquote>
       <cite className="block not-italic text-gray-400 mt-4">- Yayoi Kusama</cite>

@@ -29,6 +29,7 @@ const App: React.FC = () => {
   
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isCursorInPanel, setIsCursorInPanel] = useState(false);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
 
   useEffect(() => {
     // Simulate asset loading
@@ -77,14 +78,33 @@ const App: React.FC = () => {
       }
     };
 
+    const handleTouchStart = (e: TouchEvent) => {
+      setTouchStartY(e.touches[0].clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (touchStartY === null) {
+        return;
+      }
+      const currentY = e.touches[0].clientY;
+      if (touchStartY - currentY > 50) { // Swipe up gesture
+        handleScrollDown();
+        setTouchStartY(null); // Reset after triggering
+      }
+    };
+
     if (isHeroVisible) {
       window.addEventListener('wheel', handleWheel, { once: true });
+      window.addEventListener('touchstart', handleTouchStart, { passive: true });
+      window.addEventListener('touchmove', handleTouchMove, { passive: true });
     }
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [isHeroVisible, handleScrollDown]);
+  }, [isHeroVisible, handleScrollDown, touchStartY]);
   
   const handleGoHome = () => {
       setIsHeroFading(false);
@@ -137,7 +157,7 @@ const App: React.FC = () => {
 
       {!isHeroVisible && <Footer />}
 
-      {!isHeroVisible && !isMobileView && <ScrollToTopButton onGoHome={handleGoHome} />}
+      {!isHeroVisible && <ScrollToTopButton onGoHome={handleGoHome} />}
 
       {activeOverlay === 'about' && <About onClose={handleCloseOverlay} />}
       {activeOverlay === 'services' && <Services onClose={handleCloseOverlay} />}

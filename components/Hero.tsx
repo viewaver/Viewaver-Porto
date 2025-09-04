@@ -54,7 +54,7 @@ const Hero: React.FC<HeroProps> = ({ isFading }) => {
       <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#3B1877] to-transparent z-10 pointer-events-none"></div>
 
       <div className="relative z-20 text-center">
-        <h1 className={`text-6xl sm:text-8xl md:text-9xl whitespace-nowrap font-bold ${FONT_CLASSES[currentFontIndex]} animate-vibrant-colors`}>
+        <h1 className={`text-5xl sm:text-7xl md:text-9xl whitespace-nowrap font-bold ${FONT_CLASSES[currentFontIndex]} animate-vibrant-colors`}>
           VIEWAVER
         </h1>
       </div>
