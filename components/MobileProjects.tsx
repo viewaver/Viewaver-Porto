@@ -8,20 +8,20 @@ interface MobileProjectsProps {
 
 const MobileProjects: React.FC<MobileProjectsProps> = ({ projects, onProjectClick }) => {
   return (
-    <section id="projects" className="bg-[#3B1877]">
-      <div className="grid grid-cols-2">
+    <section id="projects" className="bg-[#3B1877] p-2 sm:p-4">
+      <div className="columns-2 gap-2 sm:gap-4">
         {projects.map((project, index) => (
           <button 
             key={project.id} 
-            className="group cursor-pointer" 
+            className="group cursor-pointer block w-full mb-2 sm:mb-4 break-inside-avoid" 
             onClick={() => onProjectClick(index)}
             aria-label={`View details for ${project.title}`}
           >
-            <div className="overflow-hidden bg-[#2a1053] aspect-square">
+            <div className="overflow-hidden bg-[#2a1053]">
               <img 
                 src={project.coverImage} 
                 alt={project.title} 
-                className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105" 
+                className="w-full h-auto object-cover transition-transform duration-300 ease-in-out group-hover:scale-105" 
                 loading="lazy"
               />
             </div>
