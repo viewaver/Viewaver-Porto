@@ -1,13 +1,15 @@
 import React from 'react';
-import QuoteCycler from './QuoteCycler';
+import Clock from './Clock';
 
 const InfoPanel: React.FC = () => {
   return (
-    <div className="text-white font-sans flex flex-col flex-grow w-full text-right">
-      <div className="flex-grow" />
-
-      <div className="mb-12">
-        <QuoteCycler />
+    // Flex container to push the content to the bottom
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow" /> {/* Spacer */}
+      
+      {/* Container for the clock component */}
+      <div className="p-4">
+        <Clock />
       </div>
     </div>
   );

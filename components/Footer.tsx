@@ -1,23 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const [currentTime, setCurrentTime] = useState('');
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Jakarta', // Based on phone number in contact
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      };
-      const timeString = new Date().toLocaleTimeString('en-US', options);
-      setCurrentTime(`WIB ${timeString}`);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   return (
     <footer className="py-12 md:py-16 text-gray-300 border-t border-[#DA5A2A]/30">
@@ -46,7 +30,6 @@ const Footer: React.FC = () => {
           <div>
             <span className="text-gray-400 uppercase text-sm tracking-widest mb-2 block">Location</span>
             <p className="text-sm">Jakarta, IDN</p>
-            <p className="text-sm">{currentTime}</p>
           </div>
         </div>
         <div className="border-t border-gray-700/50 pt-8 text-center">

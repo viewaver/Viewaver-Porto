@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import InfoPanel from './components/InfoPanel';
 import CursorGallery from './components/CursorGallery';
+import MarqueeQuote from './components/MarqueeQuote';
 
 type Overlay = 'about' | 'services' | 'contact' | null;
 
@@ -155,6 +156,7 @@ const App: React.FC = () => {
         )}
       </main>
 
+      {!isHeroVisible && <MarqueeQuote />}
       {!isHeroVisible && <Footer />}
 
       {!isHeroVisible && <ScrollToTopButton onGoHome={handleGoHome} />}

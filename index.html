@@ -6,7 +6,7 @@
     <title>VIEWAVER Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Orbitron:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&family=Oswald:wght@200..700&family=Press+Start+2P&family=Bungee+Inline&family=Monoton&family=Special+Elite&family=Sacramento&family=Anton&family=Lobster&family=Bebas+Neue&family=Caveat&family=Major+Mono+Display&family=Uncial+Antiqua&family=Creepster&family=Poppins:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Orbitron:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&family=Oswald:wght@200..700&family=Press+Start+2P&family=Bungee+Inline&family=Monoton&family=Special+Elite&family=Sacramento&family=Anton&family=Lobster&family=Bebas+Neue&family=Caveat&family=Major+Mono+Display&family=Uncial+Antiqua&family=Creepster&family=Poppins:wght@300;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       html {
@@ -81,6 +81,13 @@
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
       }
+      .highlight-bg-white {
+        background-color: #f0f0f0;
+        color: #3B1877;
+        padding: 4px 10px;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+      }
       @keyframes content-fade-in {
         from { opacity: 0; }
         to { opacity: 1; }
@@ -98,6 +105,15 @@
       }
       .animate-asterisk-colors {
         animation: asterisk-color-change 2s linear infinite;
+      }
+
+      /* Marquee animation */
+      @keyframes marquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+      .animate-marquee {
+        animation: marquee 60s linear infinite;
       }
 
       /* Cursor gallery trail animation */
