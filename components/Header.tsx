@@ -51,13 +51,13 @@ const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
       </header>
 
       {/* Mobile FAB Menu with Gooey Effect */}
-      <div className="md:hidden fixed bottom-0 right-0 w-64 h-64 z-50 pointer-events-none">
-        <div className="absolute bottom-6 right-6 pointer-events-auto">
+      <div className="md:hidden fixed top-0 right-0 w-64 h-64 z-50 pointer-events-none">
+        <div className="absolute top-6 right-6 pointer-events-auto">
           <div className="filter-gooey">
             <div className="relative w-16 h-16 flex items-center justify-center">
               {/* Radial Menu Items */}
               {navItems.map((item, index) => {
-                const angle = -90 - (index * 45); // From -90 (up) to -180 (left)
+                const angle = 90 + (index * 45); // From 90 (down) to 180 (left)
                 const translation = isMenuOpen ? 85 : 0;
                 const scale = isMenuOpen ? 1 : 0;
                 const delay = isMenuOpen ? index * 60 : (navItems.length - 1 - index) * 60;
