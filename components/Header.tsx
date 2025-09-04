@@ -55,16 +55,15 @@ const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
         <div className="absolute top-6 right-6 pointer-events-auto">
           <div className="filter-gooey">
             <div className="relative w-16 h-16 flex items-center justify-center">
-              {/* Radial Menu Items */}
+              {/* Vertical Menu Items */}
               {navItems.map((item, index) => {
-                const angle = 90 + (index * 45); // From 90 (down) to 180 (left)
-                const translation = isMenuOpen ? 85 : 0;
+                const translationY = isMenuOpen ? (index + 1) * 75 : 0; // Vertical spacing
                 const scale = isMenuOpen ? 1 : 0;
                 const delay = isMenuOpen ? index * 60 : (navItems.length - 1 - index) * 60;
 
                 const itemStyle: React.CSSProperties = {
                   position: 'absolute',
-                  transform: `rotate(${angle}deg) translateY(-${translation}px) rotate(${-angle}deg) scale(${scale})`,
+                  transform: `translateY(${translationY}px) scale(${scale})`,
                   transition: `transform 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 150ms ease-out`,
                   transitionDelay: `${delay}ms`,
                   opacity: isMenuOpen ? 1 : 0,
