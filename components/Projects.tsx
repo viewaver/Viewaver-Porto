@@ -8,7 +8,7 @@ interface ProjectsProps {
 
 const Projects: React.FC<ProjectsProps> = ({ projects, onProjectClick }) => {
   return (
-    <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-0">
+    <div className="columns-4 gap-0">
       {projects.map((project, index) => {
         return (
           <button

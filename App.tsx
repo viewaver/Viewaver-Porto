@@ -115,14 +115,14 @@ const App: React.FC = () => {
           <MobileProjects projects={PROJECTS_DATA} onProjectClick={handleProjectClick} />
         ) : (
           <div className="flex w-full">
-            <div className="w-4/5">
+            <div className="w-3/5">
                 <Projects 
                     projects={PROJECTS_DATA}
                     onProjectClick={handleProjectClick}
                  />
             </div>
             <div 
-              className="w-1/5 px-8"
+              className="w-2/5 pr-8"
               onMouseMove={handleMouseMove}
               onMouseEnter={() => setIsCursorInPanel(true)}
               onMouseLeave={() => setIsCursorInPanel(false)}
