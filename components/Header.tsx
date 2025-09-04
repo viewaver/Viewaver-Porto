@@ -51,9 +51,9 @@ const Header: React.FC<HeaderProps> = ({ onNavClick }) => {
       </header>
 
       {/* Mobile FAB Menu with Gooey Effect */}
-      <div className="md:hidden fixed bottom-6 right-6 z-50">
-        <div className="filter-gooey -m-32">
-          <div className="p-32">
+      <div className="md:hidden fixed bottom-0 right-0 w-64 h-64 z-50 pointer-events-none">
+        <div className="absolute bottom-6 right-6 pointer-events-auto">
+          <div className="filter-gooey">
             <div className="relative w-16 h-16 flex items-center justify-center">
               {/* Radial Menu Items */}
               {navItems.map((item, index) => {

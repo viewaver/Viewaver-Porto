@@ -8,12 +8,12 @@ interface MobileProjectsProps {
 
 const MobileProjects: React.FC<MobileProjectsProps> = ({ projects, onProjectClick }) => {
   return (
-    <section id="projects" className="bg-[#3B1877] p-2 sm:p-4">
-      <div className="columns-2 gap-2 sm:gap-4">
+    <section id="projects" className="bg-[#3B1877] p-0">
+      <div className="columns-2 gap-0">
         {projects.map((project, index) => (
           <button 
             key={project.id} 
-            className="group cursor-pointer block w-full mb-2 sm:mb-4 break-inside-avoid" 
+            className="group cursor-pointer block w-full mb-0 break-inside-avoid" 
             onClick={() => onProjectClick(index)}
             aria-label={`View details for ${project.title}`}
           >
