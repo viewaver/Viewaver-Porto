@@ -130,6 +130,11 @@
       .cursor-gallery-trail-image {
         animation: cursor-gallery-trail-fade-out 0.8s ease-out forwards;
       }
+      
+      /* Gooey menu filter */
+      .filter-gooey {
+        filter: url('#gooey-menu-filter');
+      }
 
       .font-metal-mania { font-family: 'Metal Mania', system-ui; }
       .font-orbitron { font-family: 'Orbitron', sans-serif; }
@@ -163,5 +168,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
+    <svg style="position:absolute; width:0; height:0; visibility: hidden;">
+      <defs>
+        <filter id="gooey-menu-filter">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+        </filter>
+      </defs>
+    </svg>
   </body>
 </html>
